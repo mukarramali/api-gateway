@@ -24,8 +24,8 @@ func For(ip string) error {
 	current_time := time.Now().UnixMilli()
 	window_offset := current_time - WindowInMilliseconds
 
-	addRequestFrom(user)
-	resetThresholdFor(user)
+	go addRequestFrom(user)
+	go resetThresholdFor(user)
 
 	req_in_window := count(user, window_offset, current_time)
 
