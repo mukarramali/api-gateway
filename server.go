@@ -20,13 +20,12 @@ func main() {
 
 		err := rate_limiter.For(user)
 		if err != nil {
-			e.Response().Header().Set("X-RateLimit-Limit", "5")
 			return echo.NewHTTPError(http.StatusTooManyRequests, "You have reached threshold")
 		}
 
 		time_taken = time.Now().UnixMicro() - request_time
 
-		return e.String(200, "Time taken!"+strconv.FormatInt(time_taken, 10))
+		return e.String(200, "Time taken by redis "+strconv.FormatInt(time_taken, 10)+"!")
 	})
 	app.Logger.Fatal(app.Start(":3001"))
 }

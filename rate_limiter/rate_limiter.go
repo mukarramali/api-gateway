@@ -11,8 +11,8 @@ import (
 )
 
 const RedisKey = "user-requests:ip"
-const Threshold = 5                    // requests per minute
-const WindowInMilliseconds = 10 * 1000 // 1 min
+const Threshold = 30                   // requests per minute
+const WindowInMilliseconds = 30 * 1000 // 1 min
 
 func str(num int64) string {
 	return strconv.FormatInt(num, 10)
