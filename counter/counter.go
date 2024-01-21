@@ -1,15 +1,12 @@
 package counter
 
 import (
-	"context"
+	"api/redis_client"
 	"strconv"
-
-	"github.com/redis/go-redis/v9"
 )
 
-func Count(store *redis.Client,
-	ctx context.Context,
-	ip string) string {
-	counter := store.Incr(ctx, ip)
+func Count(ip string) string {
+	rs := redis_client.GetRedisService()
+	counter := rs.Client.Incr(rs.Ctx, ip)
 	return strconv.FormatInt(counter.Val(), 10)
 }
