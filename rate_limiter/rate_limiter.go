@@ -2,9 +2,9 @@ package rate_limiter
 
 import (
 	"api/redis_client"
+	"api/utils"
 	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -13,10 +13,6 @@ import (
 const RedisKey = "user-requests:ip"
 const Threshold = 30                   // requests per minute
 const WindowInMilliseconds = 30 * 1000 // 1 min
-
-func str(num int64) string {
-	return strconv.FormatInt(num, 10)
-}
 
 func For(ip string) error {
 	user := RedisKey + ip
@@ -39,7 +35,7 @@ func For(ip string) error {
 
 func count(user string, from int64, to int64) int64 {
 	rs := redis_client.GetRedisService()
-	count, _ := rs.Client.ZCount(rs.Ctx, user, str(from), str(to)).Result()
+	count, _ := rs.Client.ZCount(rs.Ctx, user, utils.ToStr(from), utils.ToStr(to)).Result()
 	return count
 }
 
@@ -49,7 +45,7 @@ func resetThresholdFor(user string) {
 	current_time := time.Now().UnixMilli()
 	window_offset := current_time - WindowInMilliseconds
 
-	rs.Client.ZRemRangeByScore(rs.Ctx, user, "-inf", str(window_offset))
+	rs.Client.ZRemRangeByScore(rs.Ctx, user, "-inf", utils.ToStr(window_offset))
 }
 
 func addRequestFrom(user string) {
