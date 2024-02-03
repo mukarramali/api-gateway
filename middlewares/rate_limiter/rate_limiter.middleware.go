@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"api/rate_limiter"
 	"api/utils"
 	"fmt"
 	"net/http"
@@ -17,7 +16,7 @@ func RateLimiterMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		user := e.RealIP()
 		request_time := time.Now().UnixMicro()
 
-		err := rate_limiter.For(user)
+		err := For(user)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusTooManyRequests, "You have reached threshold")
 		}

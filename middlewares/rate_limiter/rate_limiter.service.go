@@ -1,4 +1,4 @@
-package rate_limiter
+package middlewares
 
 import (
 	"api/redis_client"

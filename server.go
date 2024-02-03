@@ -1,7 +1,7 @@
 package main
 
 import (
-	"api/middlewares"
+	middlewares "api/middlewares/rate_limiter"
 
 	"github.com/labstack/echo/v4"
 )
