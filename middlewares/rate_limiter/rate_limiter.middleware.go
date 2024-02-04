@@ -16,7 +16,7 @@ func RateLimiterMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		user := e.RealIP()
 		request_time := time.Now().UnixMicro()
 
-		err := For(user)
+		err := LimitWithRedisSet(user)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusTooManyRequests, "You have reached threshold")
 		}
