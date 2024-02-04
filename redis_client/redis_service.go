@@ -2,6 +2,7 @@ package redis_client
 
 import (
 	"context"
+	"fmt"
 	"sync"
 )
 
@@ -14,6 +15,13 @@ func GetRedisService() *RedisService {
 			Client: GetClient(),
 			Ctx:    context.Background(),
 		}
+		_, err := instance.Client.Ping(instance.Ctx).Result()
+		if err != nil {
+			fmt.Println("Error connecting to Redis:", err)
+		} else {
+			fmt.Println("Redis connected")
+		}
 	})
+
 	return instance
 }
