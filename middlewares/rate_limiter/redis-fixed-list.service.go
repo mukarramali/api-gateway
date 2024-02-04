@@ -10,12 +10,12 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type RedisSetLimiter struct{}
+type RedisFixedListLimiter struct{}
 
 /*
 Use redis' sorted sets to find the number of records from offset time to now
 */
-func (s *RedisSetLimiter) For(ip string) error {
+func (s *RedisFixedListLimiter) For(ip string) error {
 	user := RedisKey + ip
 
 	current_time := time.Now().UnixMilli()
@@ -33,13 +33,13 @@ func (s *RedisSetLimiter) For(ip string) error {
 	return nil
 }
 
-func (s *RedisSetLimiter) count(user string, from int64, to int64) int64 {
+func (s *RedisFixedListLimiter) count(user string, from int64, to int64) int64 {
 	rs := redis_client.GetRedisService()
 	count, _ := rs.Client.ZCount(rs.Ctx, user, utils.ToStr(from), utils.ToStr(to)).Result()
 	return count
 }
 
-func (s *RedisSetLimiter) addRequestFrom(user string) {
+func (s *RedisFixedListLimiter) addRequestFrom(user string) {
 	rs := redis_client.GetRedisService()
 	current_time := time.Now().UnixMilli()
 	rs.Client.ZAdd(
